@@ -14,19 +14,19 @@ function initPage() {
   let searchHistory = JSON.parse(localStorage.getItem("search")) || [];
 
   // Assigning a unique API to a variable
-  const APIKey = "bc3a99517389614616cf280137db3e08";
+  const APIKey = "84b79da5e5d7c92085660485702f4ce8";
 
   function getWeather(cityName) {
     // Execute a current weather get request from open weather api
     let queryURL =
-      "http://api.openweathermap.org/data/2.5/forecast?id=524901&appid={API key}" +
+      "https://api.openweathermap.org/data/2.5/weather?q=" +
       cityName +
       "&appid=" +
       APIKey;
     axios.get(queryURL).then(function (response) {
       todayweatherEl.classList.remove("d-none");
 
-      // Display current weather
+      // Parse response to display current weather
       const currentDate = new Date(response.data.dt * 1000);
       const day = currentDate.getDate();
       const month = currentDate.getMonth() + 1;
@@ -74,7 +74,7 @@ function initPage() {
         currentUVEl.append(UVIndex);
       });
 
-      // Get 5 day forecast
+      // Get 5 day forecast for this city
       let cityID = response.data.id;
       let forecastQueryURL =
         "https://api.openweathermap.org/data/2.5/forecast?id=" +
@@ -84,7 +84,7 @@ function initPage() {
       axios.get(forecastQueryURL).then(function (response) {
         fivedayEl.classList.remove("d-none");
 
-        //  Display forecast for next 5 days
+        //  Parse response to display forecast for next 5 days
         const forecastEls = document.querySelectorAll(".forecast");
         for (i = 0; i < forecastEls.length; i++) {
           forecastEls[i].innerHTML = "";
@@ -131,7 +131,7 @@ function initPage() {
     });
   }
 
-  // History from local storage if any
+  // Get history from local storage if any
   searchEl.addEventListener("click", function () {
     const searchTerm = cityEl.value;
     getWeather(searchTerm);
@@ -140,7 +140,7 @@ function initPage() {
     renderSearchHistory();
   });
 
-  // Clear history button
+  // Clear History button
   clearEl.addEventListener("click", function () {
     localStorage.clear();
     searchHistory = [];
